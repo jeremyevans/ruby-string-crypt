@@ -1,0 +1,67 @@
+= ruby-string-crypt
+
+ruby-string-crypt is a backwards compatible implementation of
+String#crypt for Ruby, so that the core String#crypt can be deprecated
+and later removed.
+
+String#crypt calls crypt(3) or crypt_r(3) for operating system-specific
+password hashing.  In cases where neither crypt(3) nor crypt_r(3) is
+available, a DES-crypt implementation is used. DES-crypt should be
+considered insecure, and users are strongly recommended to switch to a
+secure password hashing library such as bcrypt, scrypt, or argon2.
+
+== Usage
+
+  # Generate new password hash.
+  # Salt is an operating system specific string.
+  password_hash = "password".crypt(salt)
+
+  # Check for matching password hash.
+  # This is insecure as it is vulnerable to a timing attack.
+  "password".crypt(password_hash) == password_hash
+
+  # More secure method of checking for matching password hash
+  Rack::Utils.secure_compare(password_hash, "password".crypt(password_hash))
+
+== Installing the gem
+
+  gem install string-crypt
+
+If you want to have the library skip using crypt(3) or crypt_r(3) and
+force the internal DES-crypt implementation:
+
+  STRING_CRYPT_FORCE_MISSING=1 gem install string-crypt
+
+== Running the tests
+
+In the repository:
+
+  rake test
+
+This requires rake-compiler to compile the library, and minitest for
+testing.
+
+== Reporting issues/bugs
+
+ruby-string-crypt uses GitHub Issues for tracking issues/bugs:
+
+  https://github.com/jeremyevans/ruby-string-crypt/issues
+
+== Contributing
+
+The source code is on GitHub:
+
+  https://github.com/jeremyevans/ruby-string-crypt
+
+To get a copy:
+
+  git clone git://github.com/jeremyevans/ruby-string-crypt.git
+
+== Platforms Supported
+
+Ruby 2.1+ is supported. This library does not currently offer
+support for JRuby.
+
+== Maintainer
+
+Jeremy Evans <code@jeremyevans.net>
