@@ -1,7 +1,7 @@
-#include <errno.h>
-
 #include "ruby.h"
 #include "ruby/encoding.h"
+
+#include <errno.h>
 
 #if defined HAVE_STRING_CRYPT_R
 # if defined HAVE_STRING_CRYPT_H
