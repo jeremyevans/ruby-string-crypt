@@ -1,9 +1,6 @@
 require 'mkmf'
 
-if ENV['STRING_CRYPT_FORCE_MISSING'] == '1'
-  puts "forcing internal DES-crypt implementation"
-else
-  if /darwin/ =~ RUBY_PLATFORM && try_run(<<END)
+if /darwin/ =~ RUBY_PLATFORM && try_run(<<END)
 #include <stdio.h>
 #include <unistd.h>
 #include <string.h>
@@ -41,17 +38,16 @@ main()
     return 0;
 }
 END
-    $defs << "-DBROKEN_CRYPT"
-  end
-
-  if have_header('crypt.h')
-    have_struct_member("struct crypt_data", "initialized", "crypt.h")
-  end
-
-  have_library('crypt', 'crypt')
-  have_func('crypt_r')
-  have_func('crypt')
+  $defs << "-DBROKEN_CRYPT"
 end
+
+if have_header('crypt.h')
+  have_struct_member("struct crypt_data", "initialized", "crypt.h")
+end
+
+have_library('crypt', 'crypt')
+have_func('crypt_r')
+have_func('crypt')
 
 # Rename variables so variables from ruby/config.h are not picked up.
 if $defs

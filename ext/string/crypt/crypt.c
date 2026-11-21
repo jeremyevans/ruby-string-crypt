@@ -3,16 +3,11 @@
 
 #include <errno.h>
 
-#if defined HAVE_STRING_CRYPT_R
-# if defined HAVE_STRING_CRYPT_H
+#if (defined HAVE_STRING_CRYPT_R || defined HAVE_STRING_CRYPT) && defined HAVE_STRING_CRYPT_H
 # include <crypt.h>
-# endif
-#elif !defined HAVE_STRING_CRYPT
-# include "missing/crypt.h"
-# include "missing/crypt.c"
-# define HAVE_STRING_CRYPT_R 1
 #endif
 
+#if defined HAVE_STRING_CRYPT_R || defined HAVE_STRING_CRYPT
 static void
 mustnot_wchar(VALUE str)
 {
@@ -38,6 +33,9 @@ mustnot_wchar(VALUE str)
  *  This method is for use in system specific scripts, so if you want
  *  a cross-platform hash function consider using Digest or OpenSSL
  *  instead.
+ *
+ *  If crypt(3) is not available when the library is built, this method
+ *  raises NotImplementedError.
  */
 
 static VALUE
@@ -96,8 +94,13 @@ rb_string_crypt(VALUE str, VALUE salt)
     FL_SET_RAW(result, OBJ_TAINTED_RAW(str) | OBJ_TAINTED_RAW(salt));
     return result;
 }
+#endif
 
 void Init_crypt(void) {
     rb_eval_string("class String; remove_method(:crypt) if instance_methods(false).include?(:crypt); end");
+#if defined HAVE_STRING_CRYPT_R || defined HAVE_STRING_CRYPT
     rb_define_method(rb_cString, "crypt", rb_string_crypt, 1);
+#else
+    rb_define_method(rb_cString, "crypt", rb_f_notimplement, -1);
+#endif
 }
