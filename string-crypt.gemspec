@@ -7,7 +7,7 @@ Gem::Specification.new do |s|
   s.email = "code@jeremyevans.net"
   s.homepage = "http://github.com/jeremyevans/ruby-string-crypt"
   s.required_ruby_version = ">= 2.1"
-  s.files = %w(BSDL CHANGELOG README.rdoc Rakefile test/test_string_crypt.rb) + Dir['ext/string/crypt/{crypt.c,extconf.rb,missing/{crypt.[ch],des_tables.c}}']
+  s.files = %w(BSDL CHANGELOG README.rdoc Rakefile test/test_string_crypt.rb) + Dir['ext/string/crypt/{crypt.c,extconf.rb}']
   s.license = 'BSD-2-Clause'
   s.extensions << 'ext/string/crypt/extconf.rb'
   s.description = <<END

@@ -1,3 +1,7 @@
+=== master
+
+* Raise NotImplementedError if crypt(3) is not available, instead of falling back to an internal DES-crypt implementation (jeremyevans)
+
 === 0.9.0 (2018-07-26)
 
 * Initial Public Release
